@@ -15,6 +15,7 @@
     "bootstrap": "^3.3.7",
     "angular-resource": "^1.5.8",
     "d3": "^4.2.4",
-    "d3-angular": "*"
+    "d3-angular": "*",
+    "jQuery": "^3.1.0"
   }
 }

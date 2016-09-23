@@ -1,41 +1,28 @@
-<p>Great: This is the partial for speedGraph.</p>
-<div>
-    <a href="">today</a>
-    <a href="">prev</a>
-    <a href="">next</a>
-</div>
-<div>
-    {{controller.todayMoment}}
-</div>
-<div>
-    <a href="">week</a>
-    <a href="">month</a>
-    <a href="">3 months</a>
-</div>
-
-<download-speed-temporal-graph  style="position: relative; top: 40px;" class="graph">
-    <div class="btn-group" id="btnDiv">
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Asnums <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li ><a class="btn btn-default" id="general-graph-showAll" ng-click="showAllAsnum(2);" isvisible="false">Show All</a></li>
-                <li isVisible="false" ng-repeat="ele in asnumDailyDownloads" id="general-graph-asnum-{{ele.asnum}}">
-                    <a class="btn btn-default" id="general-graph-button-{{ele.asnum}}" ng-click="showAsnum(ele.asnum,2)">{{ele.asnum}}</a>
-                </li>
-            </ul>
+<div class="row">
+    <download-speed-temporal-graph  class="col-md-8 graph">
+        <div class="btn-group" id="btnDiv">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Public Asnums <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ><a class="btn btn-default" id="general-graph-showAll" ng-click="showAllAsnum(2);" isvisible="false">Show All</a></li>
+                    <li isVisible="false" ng-repeat="ele in (publicDownloadList | getAsnumList)" id="general-graph-asnum-{{ele}}">
+                        <a class="btn btn-default" id="general-graph-button-{{ele}}" ng-click="showAsnum(ele,2)">{{ele}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    User Asnums <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ><a class="btn btn-default active" id="user-graph-showAll" ng-click="showAllUserAsnum(2);" isvisible="true">Show All</a></li>
+                    <li isVisible="true" ng-repeat="ele in (userDownloadList | getAsnumList) " id="user-graph-asnum-{{ele}}">
+                        <a class="btn btn-default active" id="user-graph-button-{{ele}}" ng-click="showUserAsnum(ele,2)">{{ele}}</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                User Asnums <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li ><a class="btn btn-default active" id="user-graph-showAll" ng-click="showAllUserAsnum(2);" isvisible="true">Show All</a></li>
-                <li isVisible="true" ng-repeat="ele in (downloadList | getAsnumList) " id="user-graph-asnum-{{ele}}">
-                    <a class="btn btn-default active" id="user-graph-button-{{ele}}" ng-click="showUserAsnum(ele,2)">{{ele}}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</download-speed-temporal-graph>
+    </download-speed-temporal-graph>
+</div>

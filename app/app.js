@@ -44,7 +44,9 @@ controller('home', function($http) {
 controller('navigation',
   function($rootScope, $http, $location) {
 
-          var self = this
+          var self = this;
+
+          self.currentDate = moment();
 
           var authenticate = function(credentials, callback) {
 
@@ -52,7 +54,8 @@ controller('navigation',
             + btoa(credentials.username + ":" + credentials.password)
             } : {};
 
-           /* $http.get('user', {headers : headers}).then(function(response) {
+              /*
+            $http.get('http://169.254.84.99:8080/user', {headers : headers}).then(function(response) {
               if (response.data.name) {
                 $rootScope.authenticated = true;
               } else {
@@ -63,8 +66,8 @@ controller('navigation',
               $rootScope.authenticated = false;
               callback && callback();
             });
-*/
-          }
+            */
+          };
 
           authenticate();
           self.credentials = {};

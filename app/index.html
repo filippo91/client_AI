@@ -19,11 +19,11 @@
   <div ng-controller="navigation as nav" class="container">
     <ul class="nav nav-pills" role="tablist">
       <li class="active"><a href="#!/">home</a></li>
-      <li><a href="#!/speedGraph/0/0/0">speedGraph</a></li>
+      <li><a href="#!/speedGraph/2016/9/22/months">speedGraph</a></li>
       <li><a href="#!/speedTable/0/10">speedTable</a></li>
       <li><a href="#!/speedHistogram/0/0/0">speedHistogram</a></li>
       <li><a href="#!/latency/0/0/0" class="disabled">latency</a></li>
-      <li><a href="#!/domainsByAccesses/0/0/0" class="disabled">domainsByAccesses</a></li>
+      <li><a href="#!/pieAccesses/{{ nav.currentDate.year() }}/{{ nav.currentDate.month() }}/{{ nav.currentDate.date() }}/months" class="disabled">domainsByAccesses</a></li>
       <li><a href="#!/domainsBySize/0/0/0" class="disabled">domainsBySize</a></li>
       <li ng-show="!authenticated"><a href="#!/login">login</a></li>
       <li ng-show="authenticated"><a href="" ng-click="nav.logout()">logout</a></li>
@@ -44,6 +44,8 @@
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/d3/d3.js"></script>
   <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/jQuery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="app.js"></script>
   <script src="speedGraph/speedGraph.js"></script>
   <script src="speedTable/speedTable.js"></script>
