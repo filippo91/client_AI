@@ -21,10 +21,10 @@
       <li class="active"><a href="#!/">home</a></li>
       <li><a href="#!/speedGraph/2016/9/22/months">speedGraph</a></li>
       <li><a href="#!/speedTable/0/10">speedTable</a></li>
-      <li><a href="#!/speedHistogram/0/0/0">speedHistogram</a></li>
-      <li><a href="#!/latency/0/0/0" class="disabled">latency</a></li>
+      <li><a href="#!/speedHistogram/{{ nav.currentDate.year() }}/{{ nav.currentDate.month() }}/{{ nav.currentDate.date() }}/months/20">speedHistogram</a></li>
+      <li><a href="#!/latency/{{ nav.currentDate.year() }}/{{ nav.currentDate.month() }}/{{ nav.currentDate.date() }}/months/20" class="disabled">latency</a></li>
       <li><a href="#!/pieAccesses/{{ nav.currentDate.year() }}/{{ nav.currentDate.month() }}/{{ nav.currentDate.date() }}/months" class="disabled">domainsByAccesses</a></li>
-      <li><a href="#!/domainsBySize/0/0/0" class="disabled">domainsBySize</a></li>
+      <li><a href="#!/domainsBySize/{{ nav.currentDate.year() }}/{{ nav.currentDate.month() }}/{{ nav.currentDate.date() }}/months" class="disabled">domainsBySize</a></li>
       <li ng-show="!authenticated"><a href="#!/login">login</a></li>
       <li ng-show="authenticated"><a href="" ng-click="nav.logout()">logout</a></li>
     </ul>

@@ -10,24 +10,75 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
     }])
 
     .controller('domainsByAccesses', ['$route', '$routeParams', '$scope', 'domainsDownloadFactory', function($route, $routeParams, $scope, domainsDownloadFactory) {
-        $scope.trigger = {arrived:false};
-        $scope.domainList = domainsDownloadFactory.getDomainsAccessData($routeParams.year, $routeParams.month, $routeParams.day, $routeParams.view,$scope.trigger);
 
+
+        $("#" + $routeParams.view + "BtnDBA").addClass("active");
+
+        $scope.trigger = {arrived:false};
+        setTimeout(myf, 500);
+        function myf() {
+            console.log("faccio");
+            $scope.domainList = domainsDownloadFactory.getDomainsAccessData($routeParams.year, $routeParams.month, $routeParams.day, $routeParams.view, $scope.trigger);
+            $scope.$apply(function(){$scope.trigger.arrived = true;});
+        }
+        $scope.changeView = function(ele){
+            var currentParam = $routeParams;
+            switch(ele) {
+                case 'weekBtnDBA': currentParam.view = "week";  break;
+                case 'monthBtnDBA': currentParam.view = "month";    break;
+                case 'monthsBtnDBA': currentParam.view = "months";    break;
+            }
+            $route.updateParams(currentParam);
+
+        };
+        $scope.forward = function(){
+            var curDate = moment().year($routeParams.year).month($routeParams.month).date($routeParams.day);
+            console.log(curDate.format("YYYY MM DD"));
+            switch($routeParams.view){
+                case "week":   curDate.add(7,"days");  break;
+                case "month":   curDate.add(1,"months"); break;
+                case "months": curDate.add(3, "months"); break;
+            }
+            $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
+        };
+        $scope.back = function(){
+            var curDate = moment().year($routeParams.year).month($routeParams.month).date($routeParams.day);
+            console.log(curDate.format("YYYY MM DD"));
+            switch($routeParams.view){
+                case "week":   curDate.subtract(7,"days");  break;
+                case "month":   curDate.subtract(1,"months"); break;
+                case "months": curDate.subtract(3, "months"); break;
+            }
+            $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
+        }
     }])
 
     .factory('domainsDownloadFactory',['$resource', function($resource){
         var requestURI = "http://169.254.84.99:8080/pieAccesses/:year/:month/:day/:view";
         var factory = {};
+        /*
         factory.getDomainsAccessData = function(year, month, day, view, trigger){
             return $resource(requestURI).query({year : year, month : month, day : day, view : view}, function (domainList) {
                 console.log("getDomainsAccessData: " + JSON.stringify(domainList));
                 trigger.arrived = true;
             });
         };
+        */
+        factory.getDomainsAccessData = function(year, month, day, view, trigger){
+            var data = [{nRecords:10,server_domain:'google.it'},
+                {nRecords:13,server_domain:'gmail.it'},
+                {nRecords:2,server_domain:'hotmail.it'}];
+            return data;
+        };
+        factory.getDomainsSizeData = function(){
+          return [{size:33,server_domain:'google.it'},
+              {size:13,server_domain:'gmail.it'},
+              {size:89,server_domain:'hotmail.it'}];
+        };
         return factory;
     }])
 
-    .directive('accessPie',function(d3Service,domainsDownloadFactory){
+    .directive('accessPie',function(d3Service){
         return {
             restrict: 'E',
             link: function(scope,element){
@@ -45,8 +96,8 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
                         .innerRadius(0);
 
                     var labelArc = d3.svg.arc()
-                        .outerRadius(radius - 40)
-                        .innerRadius(radius - 40);
+                        .outerRadius(radius * 0.7)
+                        .innerRadius(radius * 0.7);
 
                     var pie = d3.layout.pie()
                         .sort(null)
@@ -60,6 +111,21 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
                         .append("g")
                         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+                    // Define the div for the tooltip
+                    var div = d3.select(element[0]).append("div")
+                        .attr("class", "tooltip")
+                        .style("opacity", 0);
+
+                    //loading icon
+                    svg.append("image")
+                        .attr("class", "loading")
+                        .attr("xlink:href", "img/Preloader_2.gif")
+                        .attr("x", -32)
+                        .attr("y", -32)
+                        .attr("width", 64)
+                        .attr("height", 64);
+
+
                     var drawPie = function(){
 
                         var data =  scope.domainList;
@@ -68,6 +134,7 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
                                 .append('pattern')
                                 .attr('id', 'diagonalHatch')
                                 .attr('patternUnits', 'userSpaceOnUse')
+                                .attr('class', 'noData')
                                 .attr('width', 10)
                                 .attr('height', 10)
                                 .append('image')
@@ -91,6 +158,8 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
                         }
 
                         svg.selectAll(".arc").remove();
+                        svg.selectAll(".noData").remove();
+                        svg.selectAll(".loading").remove();
                         svg.selectAll("text").remove();
                         svg.selectAll("path").remove();
 
@@ -99,19 +168,54 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
                             .enter().append("g")
                             .attr("class", "arc");
 
-                        g.append("path")
+                        var path  = g.append("path")
                             .attr("d", arc)
-                            .style("fill", function(d) { return color(d.data.server_domain); });
+                            .style("fill", function(d) { return color(d.data.server_domain); })
+                            .transition()
+                            .duration(750)
+                            .attrTween("d", tweenPie);
 
                         g.append("text")
-                            .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+                            .attr("transform", function(d) {return "translate(" + labelArc.centroid(d) + ")"; })
                             .attr("dy", ".35em")
+                            .style("font-family", "sans-serif")
+                            .style("font-size", "12px")
+                            //.style("fill", "white")
                             .text(function(d) { return d.data.server_domain; });
+
+                        //Tooltip
+                        var pane = $('.arc');
+                        var offset = pane.offset();
+                        pane.mousemove(function(e){
+                            var x = e.pageX - parseInt(offset.left), y = e.pageY - parseInt(offset.top);
+                            pane.css('cursor', 'pointer');
+                            div.transition()
+                                .duration(200)
+                                .style("opacity", .9);
+                            div.html("<i>Accesses</i><br/><b>" + d3.select(this).data()[0].value + "</b>")
+                                .style("left", (x) + "px")
+                                .style("top", (y - 28)  + "px");
+                        });
+                        pane.mouseleave(function(){
+                            div.transition()
+                            .duration(500)
+                            .style("opacity", 0);});
                     };
+                    //Animation
+                    function tweenPie(finish) {
+                        var start = {
+                            startAngle: 0,
+                            endAngle: 0
+                        };
+                        var interpolator = d3.interpolate(start, finish);
+                        return function(d) { return arc(interpolator(d)); };
+                    }
 
                     scope.$watch('trigger.arrived', function (newVal) {
-                        if(newVal === true)
+                        if(newVal === true) {
+                            console.log("Change");
                             drawPie();
+                        }
                     });
                     scope.$watch('newUserAsnumDailyAVG_trigger',function(asnum){
 

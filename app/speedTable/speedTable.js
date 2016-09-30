@@ -11,7 +11,6 @@ angular.module('myApp.speedTable', ['ngRoute', 'ngResource'])
 }])
 
 .controller('speedTable', ['$route', '$routeParams', 'speedTable_downloadManager', function($route, $routeParams, downloadManager) {
-        console.log("asdfsaf");
         this.downloadList = downloadManager.getDownloads($routeParams.page,$routeParams.size);
         this.succDownload = function() {
             $route.updateParams({page: parseInt($routeParams.page) + 1, size: $routeParams.size});
