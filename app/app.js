@@ -42,9 +42,48 @@ controller('home', function($http) {
 }).
 
 controller('navigation',
-  function($rootScope, $http, $location) {
+  function($rootScope, $http, $location, $route, $routeParams) {
 
           var self = this;
+
+      $rootScope.rowUserDownloadList =[];
+      $rootScope.rowPublicDownloadList =[];
+
+      /**
+       * Functions for controlling time
+       */
+      $rootScope.changeView = function(ele){
+          $(".view").removeClass("active");
+          var currentParam = $routeParams;
+          switch(ele) {
+              case 'weekBtn': currentParam.view = "week";  break;
+              case 'monthBtn': currentParam.view = "month";    break;
+              case 'monthsBtn': currentParam.view = "months";    break;
+          }
+          $route.updateParams(currentParam);
+          $("#" + $routeParams.view + "Btn").addClass("active");
+
+      };
+      $rootScope.forward = function(){
+          var curDate = moment().year($routeParams.year).month($routeParams.month).date($routeParams.day);
+          console.log(curDate.format("YYYY MM DD"));
+          switch($routeParams.view){
+              case "week":   curDate.add(7,"days");  break;
+              case "month":   curDate.add(1,"months"); break;
+              case "months": curDate.add(3, "months"); break;
+          }
+          $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
+      };
+      $rootScope.back = function(){
+          var curDate = moment().year($routeParams.year).month($routeParams.month).date($routeParams.day);
+          console.log(curDate.format("YYYY MM DD"));
+          switch($routeParams.view){
+              case "week":   curDate.subtract(7,"days");  break;
+              case "month":   curDate.subtract(1,"months"); break;
+              case "months": curDate.subtract(3, "months"); break;
+          }
+          $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
+      };
 
           self.currentDate = moment();
 

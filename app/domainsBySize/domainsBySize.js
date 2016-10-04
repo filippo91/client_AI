@@ -10,8 +10,8 @@ angular.module('myApp.domainsBySize', ['ngRoute'])
 }])
 
 .controller('domainsBySize', ['$route', '$routeParams', '$scope', 'domainsDownloadFactory',function($route, $routeParams, $scope, domainsDownloadFactory) {
-
-        $("#" + $routeParams.view + "BtnDBA").addClass("active");
+        $("#timeManager").show();
+        $("#" + $routeParams.view + "Btn").addClass("active");
 
         $scope.trigger = {arrived:false};
         setTimeout(myf, 2000);
@@ -20,6 +20,7 @@ angular.module('myApp.domainsBySize', ['ngRoute'])
             console.log($scope.domainSizeList);
             $scope.$apply(function(){$scope.trigger.arrived = true;});
         }
+        /*
         $scope.changeView = function(ele){
             var currentParam = $routeParams;
             switch(ele) {
@@ -50,6 +51,7 @@ angular.module('myApp.domainsBySize', ['ngRoute'])
             }
             $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
         }
+        */
 }])
 
     .directive('usagePie',function(d3Service){

@@ -11,7 +11,7 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
 
     .controller('domainsByAccesses', ['$route', '$routeParams', '$scope', 'domainsDownloadFactory', function($route, $routeParams, $scope, domainsDownloadFactory) {
 
-
+        $("#timeManager").show();
         $("#" + $routeParams.view + "BtnDBA").addClass("active");
 
         $scope.trigger = {arrived:false};
@@ -21,6 +21,7 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
             $scope.domainList = domainsDownloadFactory.getDomainsAccessData($routeParams.year, $routeParams.month, $routeParams.day, $routeParams.view, $scope.trigger);
             $scope.$apply(function(){$scope.trigger.arrived = true;});
         }
+        /*
         $scope.changeView = function(ele){
             var currentParam = $routeParams;
             switch(ele) {
@@ -51,6 +52,7 @@ angular.module('myApp.domainsByAccesses', ['ngRoute', 'ngResource'])
             }
             $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
         }
+        */
     }])
 
     .factory('domainsDownloadFactory',['$resource', function($resource){

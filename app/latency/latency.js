@@ -10,6 +10,8 @@ angular.module('myApp.latency', ['ngRoute', 'ngResource'])
     }])
 
     .controller('latency', ['$route', '$routeParams', 'latencyFactory', '$scope', function($route, $routeParams, latencyFactory, $scope) {
+        $("#timeManager").show();
+
         $scope.trigger = {arrived: false};
         $scope.latencyData = [];
         $("#" + $routeParams.view + "BtnDBA").addClass("active");
@@ -20,6 +22,7 @@ angular.module('myApp.latency', ['ngRoute', 'ngResource'])
             $scope.latencyDataSplitted = latencyFactory.splitByAsnum($scope.latencyData);
             $scope.$apply(function(){$scope.trigger.arrived = true;});
         }
+        /*
         $scope.changeView = function(ele){
             var currentParam = $routeParams;
             switch(ele) {
@@ -50,6 +53,7 @@ angular.module('myApp.latency', ['ngRoute', 'ngResource'])
             }
             $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
         };
+        */
         $scope.showAllAsnum = function(){
             var ele = $('#showAll');
             if(ele.hasClass('active')){

@@ -1,14 +1,13 @@
-<div class="row">
-    <download-speed-temporal-graph  class="col-md-8 graph">
-        <div class="btn-group" id="btnDiv">
+
+        <div class="btn-group row" id="btnDiv">
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Public Asnums <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li ><a class="btn btn-default" id="general-graph-showAll" ng-click="showAllAsnum(2);" isvisible="false">Show All</a></li>
-                    <li isVisible="false" ng-repeat="ele in (publicDownloadList | getAsnumList)" id="general-graph-asnum-{{ele}}">
-                        <a class="btn btn-default" id="general-graph-button-{{ele}}" ng-click="showAsnum(ele,2)">{{ele}}</a>
+                    <li ><a class="btn btn-default" id="public-showAll" ng-click="showAllAsnum('public');">Show All</a></li>
+                    <li ng-repeat="ele in publicDownloadList" id="public-graph-asnum-{{ele.asnum}}">
+                        <a class="btn btn-default public-asnumButton" id="public-button-{{ele.asnum}}" ng-click="showAsnum(ele.asnum,'public')">{{ele.asnum}}</a>
                     </li>
                 </ul>
             </div>
@@ -17,12 +16,12 @@
                     User Asnums <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li ><a class="btn btn-default active" id="user-graph-showAll" ng-click="showAllUserAsnum(2);" isvisible="true">Show All</a></li>
-                    <li isVisible="true" ng-repeat="ele in (userDownloadList | getAsnumList) " id="user-graph-asnum-{{ele}}">
-                        <a class="btn btn-default active" id="user-graph-button-{{ele}}" ng-click="showUserAsnum(ele,2)">{{ele}}</a>
+                    <li ><a class="btn btn-default active" id="user-showAll" ng-click="showAllAsnum('user');">Hide All</a></li>
+                    <li ng-repeat="ele in userDownloadList" id="user-graph-asnum-{{ele.asnum}}">
+                        <a class="btn btn-default active user-asnumButton" id="user-button-{{ele.asnum}}" ng-click="showAsnum(ele.asnum,'user')">{{ele.asnum}}</a>
                     </li>
                 </ul>
             </div>
         </div>
-    </download-speed-temporal-graph>
-</div>
+
+    <download-speed-temporal-graph class="row"></download-speed-temporal-graph>

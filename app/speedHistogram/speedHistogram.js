@@ -12,6 +12,7 @@ angular.module('myApp.speedHistogram', ['ngRoute'])
 .controller('speedHistogram',['$route', '$routeParams', 'speedFactory', '$scope', function($route, $routeParams, speedFactory, $scope) {
         $scope.trigger = {arrived: false};
         $("#" + $routeParams.view + "Btn").addClass("active");
+        $("#timeManager").show();
 
         setTimeout(myf, 2000);
         function myf() {
@@ -21,6 +22,7 @@ angular.module('myApp.speedHistogram', ['ngRoute'])
             $scope.speedDataPublicSplitted = speedFactory.splitByAsnum(speedDataPublic);
             $scope.$apply(function(){$scope.trigger.arrived = true;});
         }
+        /*
         $scope.changeView = function(ele){
             var currentParam = $routeParams;
             switch(ele) {
@@ -51,6 +53,8 @@ angular.module('myApp.speedHistogram', ['ngRoute'])
             }
             $route.updateParams({year : curDate.year(), month : curDate.month(), day : curDate.date(), view : $routeParams.view});
         };
+
+         */
         $scope.showAllAsnum = function(aType){
             var ele = $('#'+aType+'-showAll');
             if(ele.hasClass('active')){
